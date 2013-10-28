@@ -201,7 +201,8 @@ module CC = struct
   let flags () =
      flag ["cc";"depend"; "c"] & S [A("-I"^ocaml_libdir)];
      flag ["cc";"compile"; "c"] & S [A("-I"^ocaml_libdir)];
-     flag ["cc";"compile"; "asm"] & S [A"-D__ASSEMBLY__"]
+     flag ["cc";"compile"; "asm"] & S [A"-D__ASSEMBLY__"];
+     flag ["cc";"native_code"] & S [A"-DNATIVE_CODE"]
 end
 
 module Xen = struct
@@ -249,7 +250,18 @@ module Xen = struct
     rule ("final link: %.mx.o -> %.xen")
       ~prod:"%(file).xen"
       ~dep:"%(file).mx.o"
-      (cc_link_c_implem cc_xen_nc_link "%(file).mx.o" "%(file).xen")
+      (cc_link_c_implem cc_xen_nc_link "%(file).mx.o" "%(file).xen");
+
+    (* Native and bytecode variant builds *)
+    rule ("%.c -> %.nc.c")
+      ~prod:"%(file).nc.c"
+      ~dep:"%(file).c"
+      (fun env builder -> cp (env "%(file).c") (env "%(file).nc.c"));
+
+    rule ("%.c -> %.bc.c")
+      ~prod:"%(file).bc.c"
+      ~dep:"%(file).c"
+      (fun env builder -> cp (env "%(file).c") (env "%(file).bc.c"))
 
 end
 

@@ -1,0 +1,2 @@
+<*.nc.*>: native_code
+<*.bc.*>: byte_code
