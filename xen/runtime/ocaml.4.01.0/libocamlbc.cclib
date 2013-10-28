@@ -26,7 +26,7 @@ memory.bc.o
 meta.bc.o
 minor_gc.bc.o
 misc.bc.o
-natdynlink.bc.o
+dynlink.bc.o
 obj.bc.o
 parsing.bc.o
 printexc.bc.o
@@ -39,6 +39,7 @@ strstubs.bc.o
 sys.bc.o
 fix_code.bc.o
 weak.bc.o
+terminfo.bc.o
 bigarray_stubs.bc.o
 mmap_unix.bc.o
 startup_bc.bc.o

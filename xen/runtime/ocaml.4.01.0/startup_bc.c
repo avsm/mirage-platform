@@ -99,6 +99,7 @@ static int read_trailer(int fd, struct exec_trailer *trail)
     return BAD_BYTECODE;
 }
 
+#ifndef SYS_xen
 int caml_attempt_open(char **name, struct exec_trailer *trail,
                       int do_open_script)
 {
@@ -197,6 +198,8 @@ static char * read_section(int fd, struct exec_trailer *trail, char *name)
   return data;
 }
 
+#endif /* !SYS_xen */
+
 /* Invocation of ocamlrun: 4 cases.
 
    1.  runtime + bytecode
@@ -232,6 +235,8 @@ static uintnat heap_size_init = Init_heap_def;
 static uintnat max_stack_init = Max_stack_def;
 
 /* Parse options on the command line */
+
+#ifndef SYS_xen
 
 static int parse_command_line(char **argv)
 {
@@ -326,6 +331,7 @@ static void parse_camlrunparam(void)
     }
   }
 }
+#endif /* !SYS_xen */
 
 extern void caml_init_ieee_floats (void);
 
@@ -340,6 +346,7 @@ extern void caml_install_invalid_parameter_handler();
 
 #endif
 
+#ifndef SYS_xen
 /* Main entry point when loading code from a file */
 
 CAMLexport void caml_main(char **argv)
@@ -445,6 +452,7 @@ CAMLexport void caml_main(char **argv)
     caml_fatal_uncaught_exception(caml_exn_bucket);
   }
 }
+#endif /* !SYS_xen */
 
 /* Main entry point when code is linked in as initialized data */
 
@@ -469,12 +477,14 @@ CAMLexport void caml_startup_code(
 #ifdef DEBUG
   caml_verb_gc = 63;
 #endif
+#ifndef SYS_xen
   cds_file = getenv("CAML_DEBUG_FILE");
   if (cds_file != NULL) {
     caml_cds_file = caml_stat_alloc(strlen(cds_file) + 1);
     strcpy(caml_cds_file, cds_file);
   }
   parse_camlrunparam();
+#endif /* !SYS_xen */
   exe_name = argv[0];
 #ifdef __linux__
   if (caml_executable_name(proc_self_exe, sizeof(proc_self_exe)) == 0)

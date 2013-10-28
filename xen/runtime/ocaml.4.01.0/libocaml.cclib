@@ -1,4 +1,4 @@
-amd64.nc.o
+amd64.o
 alloc.nc.o
 array.nc.o
 backtrace.nc.o

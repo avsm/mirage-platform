@@ -195,6 +195,10 @@ CAMLprim value caml_get_current_callstack(value max_frames_value) {
 #define O_BINARY 0
 #endif
 
+#ifdef SYS_xen
+static value read_debug_info(void) { return Val_false; }
+static char *read_debug_info_error = "";
+#else
 static char *read_debug_info_error = "";
 static value read_debug_info(void)
 {
@@ -240,6 +244,7 @@ static value read_debug_info(void)
   caml_close_channel(chan);
   CAMLreturn(events);
 }
+#endif /* !SYS_xen */
 
 /* Search the event for the given PC.  Return Val_false if not found. */
 
